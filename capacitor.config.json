@@ -1,0 +1,6 @@
+{
+  "appId": "com.selvinmedina.githubapp",
+  "appName": "ionic-github-app",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}

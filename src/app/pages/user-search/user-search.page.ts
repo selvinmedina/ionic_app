@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ViewWillEnter } from '@ionic/angular';
+import { Browser } from '@capacitor/browser';
 import {
   IonContent,
   IonHeader,
@@ -93,7 +94,8 @@ export class UserSearchPage implements ViewWillEnter {
   /**
    * Open blog URL in new tab
    */
-  openBlog(url: string) {
-    window.open(url.startsWith('http') ? url : `https://${url}`, '_blank');
+  async openBlog(url: string) {
+    const safeUrl = url.startsWith('http') ? url : `https://${url}`;
+    await Browser.open({ url: safeUrl });
   }
 }
