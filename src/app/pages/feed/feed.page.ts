@@ -1,7 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
-import { githubFeature, GitHubActions } from 'src/app/store/github/github-user.feature';
+import {
+  githubFeature,
+  GitHubActions,
+} from 'src/app/store/github/github-user.feature';
 import {
   IonHeader,
   IonToolbar,
@@ -14,6 +17,7 @@ import {
   IonInfiniteScroll,
   IonInfiniteScrollContent,
 } from '@ionic/angular/standalone';
+import { HighlightReposDirective } from 'src/app/core/directives/highlight-repos.directive'; // ajusta si es necesario
 
 @Component({
   selector: 'app-feed',
@@ -30,6 +34,7 @@ import {
     IonAvatar,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
+    HighlightReposDirective,
   ],
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
@@ -52,10 +57,15 @@ export class FeedPage {
    * Dispatch next batch of users using the current "since" value
    */
   loadMoreUsers(event: Event) {
-    this.since$.subscribe((since) => {
-      this.store.dispatch(GitHubActions.loadUsers({ since }));
-      // Complete the scroll event after dispatch
-      setTimeout(() => (event.target as HTMLIonInfiniteScrollElement).complete(), 500);
-    }).unsubscribe();
+    this.since$
+      .subscribe((since) => {
+        this.store.dispatch(GitHubActions.loadUsers({ since }));
+        // Complete the scroll event after dispatch
+        setTimeout(
+          () => (event.target as HTMLIonInfiniteScrollElement).complete(),
+          500
+        );
+      })
+      .unsubscribe();
   }
 }
