@@ -3,7 +3,7 @@ import { GitHubUserSummary } from './models/github-user-summary.model';
 import { GitHubUserDetail } from './models/github-user-detail.model';
 
 export interface GitHubState {
-  users: GitHubUserSummary[];
+  users: GitHubUserDetail[];
   selectedUser: GitHubUserDetail | null;
   loading: boolean;
   error: string | null;
@@ -22,7 +22,7 @@ export const GitHubActions = createActionGroup({
   source: 'GitHub',
   events: {
     'Load Users': props<{ since: number }>(),
-    'Load Users Success': props<{ users: GitHubUserSummary[] }>(),
+    'Load Users Success': props<{ users: GitHubUserDetail[] }>(),
     'Load Users Failure': props<{ error: string }>(),
 
     'Load User By Username': props<{ username: string }>(),
