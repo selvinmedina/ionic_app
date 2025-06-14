@@ -1,20 +1,61 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { githubFeature, GitHubActions } from 'src/app/store/github/github-user.feature';
+import {
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonContent,
+  IonList,
+  IonItem,
+  IonLabel,
+  IonAvatar,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
+} from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-feed',
+  standalone: true,
+  imports: [
+    CommonModule,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonList,
+    IonItem,
+    IonLabel,
+    IonAvatar,
+    IonInfiniteScroll,
+    IonInfiniteScrollContent,
+  ],
   templateUrl: './feed.page.html',
   styleUrls: ['./feed.page.scss'],
-  standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
 })
-export class FeedPage implements OnInit {
+export class FeedPage {
+  private store = inject(Store);
 
-  constructor() { }
+  users$ = this.store.select(githubFeature.selectUsers);
+  loading$ = this.store.select(githubFeature.selectLoading);
+  since$ = this.store.select(githubFeature.selectSince);
 
-  ngOnInit() {
+  /**
+   * Dispatch initial load of GitHub users
+   */
+  constructor() {
+    this.store.dispatch(GitHubActions.loadUsers({ since: 0 }));
   }
 
+  /**
+   * Dispatch next batch of users using the current "since" value
+   */
+  loadMoreUsers(event: Event) {
+    this.since$.subscribe((since) => {
+      this.store.dispatch(GitHubActions.loadUsers({ since }));
+      // Complete the scroll event after dispatch
+      setTimeout(() => (event.target as HTMLIonInfiniteScrollElement).complete(), 500);
+    }).unsubscribe();
+  }
 }
