@@ -1,4 +1,12 @@
-import { createFeature, createReducer, on, createSelector, createActionGroup, props } from '@ngrx/store';
+import {
+  createFeature,
+  createReducer,
+  on,
+  createSelector,
+  createActionGroup,
+  props,
+  emptyProps,
+} from '@ngrx/store';
 import { GitHubUserSummary } from './models/github-user-summary.model';
 import { GitHubUserDetail } from './models/github-user-detail.model';
 
@@ -28,6 +36,7 @@ export const GitHubActions = createActionGroup({
     'Load User By Username': props<{ username: string }>(),
     'Load User By Username Success': props<{ user: GitHubUserDetail }>(),
     'Load User By Username Failure': props<{ error: string }>(),
+    'Clear Selected User': emptyProps(),
   },
 });
 
@@ -71,6 +80,11 @@ export const githubFeature = createFeature({
       ...state,
       loading: false,
       error,
+    })),
+
+    on(GitHubActions.clearSelectedUser, (state) => ({
+      ...state,
+      selectedUser: null,
     }))
   ),
 
