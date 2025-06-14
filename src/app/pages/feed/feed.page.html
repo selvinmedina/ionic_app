@@ -8,7 +8,7 @@
   <div *ngIf="loading$ | async" class="ion-padding">Loading users...</div>
 
   <ion-list *ngIf="users$ | async as users">
-    <ion-item *ngFor="let user of users">
+    <ion-item *ngFor="let user of users" (click)="goToUserSearch(user.login)">
       <ion-avatar slot="start">
         <img [src]="user.avatar_url" />
       </ion-avatar>

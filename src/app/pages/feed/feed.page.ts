@@ -18,6 +18,7 @@ import {
   IonInfiniteScrollContent,
 } from '@ionic/angular/standalone';
 import { HighlightReposDirective } from 'src/app/core/directives/highlight-repos.directive'; // ajusta si es necesario
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-feed',
@@ -41,6 +42,7 @@ import { HighlightReposDirective } from 'src/app/core/directives/highlight-repos
 })
 export class FeedPage {
   private store = inject(Store);
+  private router = inject(Router);
 
   users$ = this.store.select(githubFeature.selectUsers);
   loading$ = this.store.select(githubFeature.selectLoading);
@@ -67,5 +69,13 @@ export class FeedPage {
         );
       })
       .unsubscribe();
+  }
+  /**
+   * Navigate to the User Search tab with the login prefilled
+   */
+  goToUserSearch(username: string) {
+    this.router.navigate(['/user-search'], {
+      queryParams: { username },
+    });
   }
 }
